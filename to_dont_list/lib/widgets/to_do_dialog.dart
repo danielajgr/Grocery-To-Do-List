@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-typedef ToDoListAddedCallback = Function(
-    String value, TextEditingController textConroller);
+List<String> measurements = ["TBSP(s)", "TSP(s)", "CUP(s)", "BOX(es)", "CAN(s)"];
+
+typedef ToDoListAddedCallback = Function(String name, double quantity, String unit, TextEditingController textController1, TextEditingController textController2);
+
 
 class ToDoDialog extends StatefulWidget {
   const ToDoDialog({
@@ -16,58 +18,83 @@ class ToDoDialog extends StatefulWidget {
 }
 
 class _ToDoDialogState extends State<ToDoDialog> {
-  // Dialog with text from https://www.appsdeveloperblog.com/alert-dialog-with-a-text-field-in-flutter/
-  final TextEditingController _inputController = TextEditingController();
+  final TextEditingController _inputController1 = TextEditingController();
+  final TextEditingController _inputController2 = TextEditingController();
+
   final ButtonStyle yesStyle = ElevatedButton.styleFrom(
       textStyle: const TextStyle(fontSize: 20), backgroundColor: Colors.green);
   final ButtonStyle noStyle = ElevatedButton.styleFrom(
       textStyle: const TextStyle(fontSize: 20), backgroundColor: Colors.red);
 
-  String valueText = "";
+  String valueText1 = "";
+  String valueText2 = "";
+  String initUnit = measurements.first;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Item To Add'),
-      content: TextField(
-        onChanged: (value) {
-          setState(() {
-            valueText = value;
-          });
-        },
-        controller: _inputController,
-        decoration: const InputDecoration(hintText: "type something here"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            onChanged: (value) {
+              setState(() {
+                valueText1 = value;
+              });
+            },
+            controller: _inputController1,
+            decoration: const InputDecoration(hintText: "Type something here"),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      valueText2 = value;
+                    });
+                  },
+                  controller: _inputController2,
+                  decoration: const InputDecoration(hintText: "Measurement"),
+                ),
+              ),
+              DropdownButton<String>(
+                value: initUnit,
+                onChanged: (String? unit) {
+                  setState(() {
+                    initUnit = unit!;
+                  });
+                },
+                items: measurements.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        ],
       ),
       actions: <Widget>[
-         ValueListenableBuilder<TextEditingValue>(
-          valueListenable: _inputController,
-          builder: (context, value, child) {
-            return ElevatedButton(
-              key: const Key("OKButton"),
-              style: noStyle,
-              onPressed: value.text.isNotEmpty
-                  ? () {
-                      setState(() {
-                        widget.onListAdded(valueText, _inputController);
-                        Navigator.pop(context);
-                      });
-                    }
-                  : null,
-              child: const Text('OK'),
-            );
-          },
+        ElevatedButton(
+          key: const Key("OKButton"),
+          style: yesStyle,
+          onPressed: valueText1.isNotEmpty && valueText2.isNotEmpty
+              ? () {
+                  widget.onListAdded(valueText1, double.parse(valueText2), initUnit, _inputController1,_inputController2);
+                  Navigator.pop(context);
+                }
+              : null,
+          child: const Text('OK'),
         ),
-        
-
-        // https://stackoverflow.com/questions/52468987/how-to-turn-disabled-button-into-enabled-button-depending-on-conditions
         ElevatedButton(
           key: const Key("CancelButton"),
-          style: yesStyle,
+          style: noStyle,
           child: const Text('Cancel'),
           onPressed: () {
-            setState(() {
-              Navigator.pop(context);
-            });
+            Navigator.pop(context);
           },
         ),
       ],
