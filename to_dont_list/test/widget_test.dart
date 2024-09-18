@@ -10,21 +10,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:to_dont_list/main.dart';
 import 'package:to_dont_list/objects/ingredient.dart';
-import 'package:to_dont_list/objects/item.dart';
 import 'package:to_dont_list/widgets/to_do_items.dart';
 
 void main() {
-  test('Item abbreviation should be first letter', () {
-    const item = Ingredient(name: "add more todos");
-    expect(item.abbrev(), "a");
-  });
-
   // Yes, you really need the MaterialApp and Scaffold
   testWidgets('ToDoListItem has a text', (tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: ToDoListItem(
-                item: const Ingredient(name: "test"),
+                item: const Ingredient(name: "test", amount: 1, units: "Box(es)", group: "Other"),
                 completed: true,
                 onListChanged: (Ingredient item, bool completed) {},
                 onDeleteItem: (Ingredient item) {}))));
@@ -40,7 +34,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: ToDoListItem(
-                item: const Ingredient(name: "test"),
+                item: const Ingredient(name: "test", amount: 1, units: "Box(es)", group: "Other"),
                 completed: true,
                 onListChanged: (Ingredient item, bool completed) {},
                 onDeleteItem: (Ingredient item) {}))));

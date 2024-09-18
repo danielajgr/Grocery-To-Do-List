@@ -62,7 +62,7 @@ class ToDoListItem extends StatelessWidget {
           color: Colors.blue,
           child: Center( // Center the text inside the square
             child: Text(
-              (item.amount.toString() +" " + item.units ),
+              ('${item.amount} ${item.units}'),
               style: _getTextStyle(context), // Optional: make text more visible
             ),
           ),

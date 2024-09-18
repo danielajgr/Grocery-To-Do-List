@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-List<String> measurements = ["TBSP(s)", "TSP(s)", "CUP(s)", "BOX(es)", "CAN(s)"];
-List<String> groups = ["Produce", "Spices", "Dairy", "Canned Goods", "Meat", "Other"];
+List<String> measurements = ["TBSP(s)", "TSP(s)", "CUP(s)", "BOX(es)", "CAN(s)", "N/A"];
+List<String> groups = ["Produce", "Spices", "Dairy", "Canned Goods", "Protein", "Other"];
 
 
-typedef ToDoListAddedCallback = Function(String name, double quantity, String unit, TextEditingController textController1, TextEditingController textController2);
+typedef ToDoListAddedCallback = Function(String name, double quantity, String unit, String group, TextEditingController textController1, TextEditingController textController2);
 
 
 class ToDoDialog extends StatefulWidget {
@@ -110,7 +110,7 @@ class _ToDoDialogState extends State<ToDoDialog> {
           style: yesStyle,
           onPressed: valueText1.isNotEmpty && valueText2.isNotEmpty
               ? () {
-                  widget.onListAdded(valueText1, double.parse(valueText2), initUnit, _inputController1,_inputController2);
+                  widget.onListAdded(valueText1, double.parse(valueText2), initUnit,initGroup, _inputController1,_inputController2);
                   Navigator.pop(context);
                 }
               : null,

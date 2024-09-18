@@ -12,8 +12,12 @@ class ToDoList extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoList> {
-  final List<Ingredient> items = [const Ingredient(name: "Cereal", amount: 1, units: "Box(es)")];
+  final List<Ingredient> items = [const Ingredient(name: "Cereal", amount: 1, units: "Box(es)", group: "Other")];
+  Map<String, List<Ingredient>> groupings = {}; 
   final _itemSet = <Ingredient>{};
+
+
+  
 
   void _handleListChanged(Ingredient item, bool completed) {
     setState(() {
@@ -43,10 +47,10 @@ class _ToDoListState extends State<ToDoList> {
     });
   }
 
-  void _handleNewItem(String itemText, double amountText, String unitText, TextEditingController textController1, TextEditingController textController2) {
+  void _handleNewItem(String itemText, double amountText, String unitText, String groupText, TextEditingController textController1, TextEditingController textController2) {
     setState(() {
       print("Adding new item");
-      Ingredient item =  Ingredient(name: itemText, amount: amountText, units: unitText);
+      Ingredient item =  Ingredient(name: itemText, amount: amountText, units: unitText, group: groupText);
       items.insert(0, item);
       textController1.clear();
       textController2.clear();
@@ -56,23 +60,47 @@ class _ToDoListState extends State<ToDoList> {
 
   @override
   Widget build(BuildContext context) {
+    groupings = {};
 
+    for (var ingred in items) {
+    if (groupings.containsKey(ingred.group)) {
+      groupings[ingred.group]!.add(ingred);
+    } else {
+      groupings[ingred.group] = [ingred];
+    }
+  }
     
     return Scaffold(
         appBar: AppBar(
           title: const Text('To Do List'),
         ),
-        body: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          children: items.map((item) {
-            return ToDoListItem(
-              item: item,
-              completed: _itemSet.contains(item),
-              onListChanged: _handleListChanged,
-              onDeleteItem: _handleDeleteItem,
-            );
-          }).toList(),
-        ),
+        body:  ListView(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      children: groupings.entries.map((entry) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                entry.key, 
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Column(
+              children: entry.value.map((item) {
+                return ToDoListItem(
+                  item: item,
+                  completed: _itemSet.contains(item),
+                  onListChanged: _handleListChanged,
+                  onDeleteItem: _handleDeleteItem,
+                );
+              }).toList(),
+            ),
+          ],
+        );
+      }).toList(),
+    ),
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
