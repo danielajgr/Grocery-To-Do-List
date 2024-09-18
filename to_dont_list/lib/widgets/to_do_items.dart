@@ -49,10 +49,26 @@ class ToDoListItem extends StatelessWidget {
               onDeleteItem(item);
             }
           : null,
-      leading: CircleAvatar(
-        backgroundColor: _getColor(context),
-        child: Text(item.amount.toString()),
-      ),
+      leading: ClipRRect(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(5),
+          bottomRight: Radius.circular(5),
+          topLeft: Radius.circular(5),
+          topRight: Radius.circular(5),
+        ),
+        child: Container(
+          width: 70, // Adjust the width as needed
+          height: 40, // Adjust the height as needed
+          color: Colors.blue,
+          child: Center( // Center the text inside the square
+            child: Text(
+              (item.amount.toString() +" " + item.units ),
+              style: _getTextStyle(context), // Optional: make text more visible
+            ),
+          ),
+        ),
+)
+,
       title: Text(
         item.name,
         style: _getTextStyle(context),
