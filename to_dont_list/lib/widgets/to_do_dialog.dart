@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 List<String> measurements = ["TBSP(s)", "TSP(s)", "CUP(s)", "BOX(es)", "CAN(s)"];
+List<String> groups = ["Produce", "Spices", "Dairy", "Canned Goods", "Meat", "Other"];
+
 
 typedef ToDoListAddedCallback = Function(String name, double quantity, String unit, TextEditingController textController1, TextEditingController textController2);
 
@@ -21,6 +23,7 @@ class _ToDoDialogState extends State<ToDoDialog> {
   final TextEditingController _inputController1 = TextEditingController();
   final TextEditingController _inputController2 = TextEditingController();
 
+
   final ButtonStyle yesStyle = ElevatedButton.styleFrom(
       textStyle: const TextStyle(fontSize: 20), backgroundColor: Colors.green);
   final ButtonStyle noStyle = ElevatedButton.styleFrom(
@@ -28,7 +31,11 @@ class _ToDoDialogState extends State<ToDoDialog> {
 
   String valueText1 = "";
   String valueText2 = "";
+  String label = "Group:    ";
+
   String initUnit = measurements.first;
+  String initGroup = groups.first;
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +74,26 @@ class _ToDoDialogState extends State<ToDoDialog> {
                   });
                 },
                 items: measurements.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(label, style: TextStyle(  
+              fontSize: 20)),
+              DropdownButton<String>(
+                value: initGroup,
+                onChanged: (String? group) {
+                  setState(() {
+                    initGroup = group!;
+                  });
+                },
+                items: groups.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
