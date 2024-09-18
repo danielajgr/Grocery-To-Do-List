@@ -1,2 +1,1 @@
-# to-dont-list
-A broken list of things to do
+Users can add ingredient items to a list. Each item requires a name, amount, unit, and group. Each item is sorted into the assigned groups on the screen, giving the user a clearer understanding of where each item can be found in a store. 
