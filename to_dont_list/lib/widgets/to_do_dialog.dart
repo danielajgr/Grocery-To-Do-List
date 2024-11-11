@@ -84,8 +84,7 @@ class _ToDoDialogState extends State<ToDoDialog> {
           ),
           Row(
             children: [
-              Text(label, style: TextStyle(  
-              fontSize: 20)),
+              Text(label, style: TextStyle(fontSize: 20)),
               DropdownButton<String>(
                 value: initGroup,
                 onChanged: (String? group) {
