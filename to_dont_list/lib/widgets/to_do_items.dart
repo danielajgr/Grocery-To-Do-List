@@ -38,6 +38,10 @@ class ToDoListItem extends StatelessWidget {
     );
   }
 
+  String _getAmount() {
+    return item.units == "N/A" ? '${item.amount}' : '${item.amount} ${item.units}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -62,7 +66,7 @@ class ToDoListItem extends StatelessWidget {
           color: Colors.blue,
           child: Center( // Center the text inside the square
             child: Text(
-              ('${item.amount} ${item.units}'),
+              _getAmount(),
               style: _getTextStyle(context), // Optional: make text more visible
             ),
           ),
